@@ -1,0 +1,10 @@
+<h1>Manejo de torneos</h1>
+
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <a mat-tab-link routerLink="partidos" routerLinkActive #partidosLink="routerLinkActive" [active]="partidosLink.isActive">Partidos</a>
+  <a mat-tab-link routerLink="equipos" routerLinkActive #equiposLink="routerLinkActive" [active]="equiposLink.isActive">Equipos</a>
+  <a mat-tab-link routerLink="ajustes" routerLinkActive #ajustesLink="routerLinkActive" [active]="ajustesLink.isActive">Ajustes</a>
+</nav>
+<mat-tab-nav-panel #tabPanel>
+  <router-outlet />
+</mat-tab-nav-panel>
