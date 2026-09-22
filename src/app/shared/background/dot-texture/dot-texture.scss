@@ -1,0 +1,29 @@
+// Textura "puntos" del design system (KIT / Texturas-Emblemas-Ilustraciones,
+// nodo "textura/puntos" en Figma). El export de Figma trae ~200 <path>
+// individuales por cada punto — nada de eso se reprodujo a mano; en su lugar
+// se generó programáticamente con un radial-gradient repetido, que es
+// exactamente el mismo patrón (grilla regular de puntos) pero se puede
+// mandar a llamar en cualquier pantalla/tamaño sin cargar geometría fija.
+//
+// Medidas tomadas del export real: diámetro de punto 2.28px, separación
+// 22.76px entre centros (misma proporción en X e Y).
+:host {
+  --dot-color: #{'#FFFFFF'};
+  --dot-opacity: 0.08;
+  --dot-diameter: 2.28px;
+  --dot-spacing: 22.76px;
+
+  display: block;
+}
+
+.dot-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--dot-color) calc(var(--dot-opacity) * 100%), transparent) calc(var(--dot-diameter) / 2),
+    transparent calc(var(--dot-diameter) / 2)
+  );
+  background-size: var(--dot-spacing) var(--dot-spacing);
+}
