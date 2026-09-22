@@ -22,10 +22,10 @@ body {
   // El diseño en Figma (style tile "Torneos") es oscuro con acento naranja.
   color-scheme: dark;
 
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  // Fondo tomado literal del style tile (#0E0E10), en vez del tono que
+  // genera automáticamente el theming M3 — así no depende de que la
+  // paleta auto-calculada coincida por casualidad con el token real.
+  background-color: #0e0e10;
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 
