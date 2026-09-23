@@ -29,15 +29,9 @@
   }
 }
 
-// Material reserva espacio abajo del input para mensajes de error/hint
-// aunque no los uses — eso era el salto grande antes del checkbox.
 ::ng-deep .dialog .mat-mdc-form-field-subscript-wrapper {
   display: none;
 }
-
-// El borde del input NO es un solo elemento: Material lo dibuja en 3 piezas
-// (leading / notch / trailing). Forzamos el color ahí directo, no en la
-// variable --mdc-outlined-text-field-outline-color (no estaba pegando).
 
 // Estado NORMAL (sin hacer click adentro) — lo que pediste
 ::ng-deep .dialog .mdc-notched-outline__leading,
@@ -64,16 +58,11 @@
   color: var(--color-text) !important;
 }
 
-// mat-checkbox trae ~11px de padding interno (área de toque/ripple) que
-// hace que el cuadradito visual quede desalineado del borde del input.
-// OJO: hay que mover el componente completo (caja + texto), no solo la
-// caja interna, o el texto se queda atrás y se superpone.
 ::ng-deep .dialog .mat-mdc-checkbox {
   margin-left: -11px;
 }
 
-// Checkbox SIN marcar: forzamos el borde directamente sobre el elemento
-// visual (no la variable --mdc-*, que en tu versión de Material no pega).
+// Checkbox SIN marcar
 ::ng-deep .dialog .mdc-checkbox__background {
   border-color: var(--color-primary-muted) !important;
 }

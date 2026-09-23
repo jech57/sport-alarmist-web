@@ -1,4 +1,6 @@
 <button mat-flat-button class="app-button" [ngClass]="'app-button--' + variant" [disabled]="disabled">
-  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-  {{ label }}
+  <span class="app-button__content">
+    <app-icon-trophy *ngIf="icon" class="app-button__icon"></app-icon-trophy>
+    <span>{{ label }}</span>
+  </span>
 </button>
