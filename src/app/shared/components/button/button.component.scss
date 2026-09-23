@@ -1,0 +1,19 @@
+.app-button {
+  border-radius: 8px !important;
+}
+
+.app-button--primary {
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+}
+
+.app-button--secondary {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-on-secondary) !important;
+}
+
+.app-button--outline {
+  background-color: transparent !important;
+  color: var(--color-primary) !important;
+  border: 1.5px solid var(--color-primary);
+}
