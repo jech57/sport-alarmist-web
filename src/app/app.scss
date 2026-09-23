@@ -1,4 +1,32 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   position: relative;
-  min-height: 100vh;
+  overflow: hidden;
+
+  app-dot-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none; 
+  }
+
+  app-header,
+  router-outlet + * {
+    position: relative;
+    z-index: 1;
+  }
+
+  router-outlet + * {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0; 
+  }
 }

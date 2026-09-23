@@ -1,0 +1,14 @@
+.empty-state-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.empty-state-doodle {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}

@@ -5,11 +5,11 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./features/home/home').then((m) => m.Home),
   },
-  {
+/*   {
     path: 'torneos/nuevo',
     loadComponent: () =>
       import('./features/tournament-new/tournament-new').then((m) => m.TournamentNew),
-  },
+  }, */
   {
     path: 'torneos/:id',
     loadComponent: () =>

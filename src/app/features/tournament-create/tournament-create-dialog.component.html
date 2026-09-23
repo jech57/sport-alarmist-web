@@ -1,0 +1,20 @@
+<div class="dialog">
+  <h2 class="dialog__title">Nuevo torneo</h2>
+
+  <mat-form-field appearance="outline" class="dialog__field">
+    <mat-label>Nombre del torneo</mat-label>
+    <input matInput [(ngModel)]="name" />
+  </mat-form-field>
+
+  <div class="dialog__checkbox-row">
+    <mat-checkbox [(ngModel)]="enableRegistrations">Habilitar inscripciones</mat-checkbox>
+    <app-info-tooltip
+      text="Si habilitas esta opción, el torneo será visible para los jugadores. Si no la habilitas ahora, podrás hacerlo más tarde en Ajustes."
+    ></app-info-tooltip>
+  </div>
+
+  <div class="dialog__actions">
+    <app-button label="Cancelar" (click)="cancel()"></app-button>
+    <app-button label="Añadir" [disabled]="!name.trim()" (click)="add()"></app-button>
+  </div>
+</div>
