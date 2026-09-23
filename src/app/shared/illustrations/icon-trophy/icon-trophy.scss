@@ -1,0 +1,15 @@
+:host {
+  display: inline-flex;
+  color: inherit; // el svg usa stroke="currentColor", esto lo conecta con el color del boton
+}
+
+:host ::ng-deep svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+// Grosor de las líneas del trofeo. Sube este número para un trazo más grueso.
+:host ::ng-deep svg path {
+  stroke-width: 2.5;
+}

@@ -8,13 +8,14 @@
 
   <div class="dialog__checkbox-row">
     <mat-checkbox [(ngModel)]="enableRegistrations">Habilitar inscripciones</mat-checkbox>
-    <app-info-tooltip class="dialog__info-icon"
+    <app-info-tooltip
+      class="dialog__info-icon"
       text="Si habilitas esta opción, el torneo será visible para los jugadores. Si no la habilitas ahora, podrás hacerlo más tarde en Ajustes."
     ></app-info-tooltip>
   </div>
 
   <div class="dialog__actions">
-    <app-button label="Cancelar" (click)="cancel()"></app-button>
+    <app-button label="Cancelar" variant="neutral" (click)="cancel()"></app-button>
     <app-button label="Añadir" [disabled]="!name.trim()" (click)="add()"></app-button>
   </div>
 </div>

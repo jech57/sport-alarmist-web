@@ -1,5 +1,29 @@
 .app-button {
   border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+::ng-deep .app-button .mdc-button__label {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+  height: 100% !important;
+}
+
+.app-button__content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1; // sin esto, el texto reserva espacio invisible abajo y el icono se ve "arriba"
+}
+
+.app-button__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  position: relative;
+  top: -1px; // ajuste óptico: el dibujo del trofeo pesa visualmente arriba (copa ancha, base angosta)
 }
 
 .app-button--primary {
@@ -16,4 +40,15 @@
   background-color: transparent !important;
   color: var(--color-primary) !important;
   border: 1.5px solid var(--color-primary);
+}
+
+.app-button--neutral {
+  background-color: var(--color-cancel-bg) !important;
+  color: var(--color-cancel-text) !important;
+}
+
+.app-button:disabled {
+  background-color: var(--color-button-disabled) !important;
+  color: var(--color-button-disabled-text) !important;
+  cursor: not-allowed;
 }
