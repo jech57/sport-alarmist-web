@@ -10,4 +10,5 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class InfoTooltipComponent {
   @Input() text = '';
+  @Input() size = 21;
 }
