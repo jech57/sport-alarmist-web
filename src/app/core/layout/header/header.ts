@@ -16,7 +16,8 @@ export class Header {
   
     onAddTournament() {
     const ref = this.dialog.open(TournamentCreateDialogComponent, {
-      panelClass: 'tournament-create-panel'
+      panelClass: 'tournament-create-panel',
+      autoFocus: false
     });
  
     ref.afterClosed().subscribe((result) => {
