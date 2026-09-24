@@ -67,6 +67,10 @@ export class TournamentCreateService {
     return this.tournaments$.asObservable();
   }
 
+  hasAny$(): Observable<boolean> {
+    return this.tournaments$.pipe(map((tournaments) => Object.keys(tournaments).length > 0));
+  }
+
   getSelectedId$(): Observable<string | null> {
     return this.selectedId$.asObservable();
   }

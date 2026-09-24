@@ -4,8 +4,14 @@ app-tournament {
 }
 
 .empty-state {
+  // inset:0 ignoraba el panel de torneos (fixed a la izquierda): el
+  // centrado real debe ser relativo al espacio a su derecha, igual que
+  // app-tournament (margin-left) y el nav de tabs (left/width con calc()).
   position: fixed;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: var(--panel-width);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,17 +27,41 @@ app-tournament {
 
 .empty-state__hello {
   margin: 0;
-  font-size: 72px;
+  font-size: 48px;
   font-weight: 900;
   letter-spacing: -1px;
   line-height: 1;
-  cursor: default;
-  transition: transform 0.25s ease, text-shadow 0.25s ease, color 0.25s ease;
 
-  &:hover {
-    transform: scale(1.06);
-    color: var(--color-primary-muted);
-    text-shadow: 0 0 46px rgba(255, 106, 0, 0.6);
+  // Barrido de color continuo de izquierda a derecha (no hover): un
+  // gradiente más ancho que el texto se desliza sobre él en loop.
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #ffffff 40%,
+    var(--color-primary-muted) 50%,
+    #ffffff 60%,
+    #ffffff 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: empty-state-hello-sweep 4.5s linear infinite;
+}
+
+@keyframes empty-state-hello-sweep {
+  0% {
+    background-position: 130% 0;
+  }
+  100% {
+    background-position: -130% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-state__hello {
+    animation: none;
+    background-position: 0 0;
   }
 }
 

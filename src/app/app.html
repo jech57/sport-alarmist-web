@@ -1,6 +1,6 @@
-<div class="app-shell">
+<div class="app-shell" [style.--panel-width]="(hasTournaments$ | async) ? '220px' : '0px'">
   <app-dot-texture />
-  <app-tournament-panel />
+  <app-tournament-panel *ngIf="hasTournaments$ | async" />
   <app-header />
   <router-outlet />
 </div>
