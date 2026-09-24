@@ -13,38 +13,27 @@
         <div class="matches-table__date-row">
           <span>{{ formatDate(entry.value.date) }} ({{ entry.value.count }})</span>
 
-          <!-- editar fecha: abre el calendario a la derecha, precargado -->
-          <span class="matches-table__date-edit-wrapper">
-            <button
-              type="button"
-              class="matches-table__icon-btn"
-              aria-label="Editar fecha"
-              (click)="onEditDateClick(entry.value.date); dateDp.open()"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 20l1-4L16.5 4.5a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L8 19l-4 1z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-            <input
-              [matDatepicker]="dateDp"
-              [(ngModel)]="editDateValue"
-              (dateChange)="onDateChanged(entry.key, $event.value)"
-              class="matches-table__hidden-date-input"
-            />
-          </span>
-          <mat-datepicker #dateDp xPosition="start" panelClass="matches-datepicker-panel">
-            <mat-datepicker-actions>
-              <button mat-button matDatepickerCancel>Cancelar</button>
-              <button mat-button matDatepickerApply>OK</button>
-            </mat-datepicker-actions>
-          </mat-datepicker>
+          <!-- editar/eliminar fecha, con el mismo gap que row-actions (8px) -->
+          <div class="matches-table__row-actions matches-table__row-actions--inline">
+            <span class="matches-table__date-edit-wrapper">
+              <app-edit-button (edit)="onEditDateClick(entry.value.date); dateDp.open()"></app-edit-button>
+              <input
+                [matDatepicker]="dateDp"
+                [(ngModel)]="editDateValue"
+                (dateChange)="onDateChanged(entry.key, $event.value)"
+                class="matches-table__hidden-date-input"
+              />
+            </span>
+            <mat-datepicker #dateDp xPosition="start" panelClass="matches-datepicker-panel">
+              <mat-datepicker-actions>
+                <button mat-button matDatepickerCancel>Cancelar</button>
+                <button mat-button matDatepickerApply>OK</button>
+              </mat-datepicker-actions>
+            </mat-datepicker>
 
-          <!-- TODO: funcionalidad real de eliminar fecha -->
-          <button type="button" class="matches-table__icon-btn" aria-label="Eliminar fecha">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
+            <!-- TODO: funcionalidad real de eliminar fecha -->
+            <app-delete-button></app-delete-button>
+          </div>
 
           <!-- colapsa/expande los partidos de esta fecha -->
           <button
@@ -67,18 +56,12 @@
               <span>{{ match.value.team2 }}</span>
               <span>{{ match.value.time }}</span>
               <span>{{ match.value.place }}</span>
+              <!-- TODO: calcular confirmados reales cuando exista el roster de jugadores -->
+              <span>0/0 | 0/0 = 0/0</span>
               <div class="matches-table__row-actions">
                 <!-- TODO: funcionalidad real de eliminar partido -->
-                <button type="button" class="matches-table__icon-btn" aria-label="Editar partido" (click)="onEditMatch(entry.key, match.key, match.value)">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 20l1-4L16.5 4.5a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L8 19l-4 1z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </button>
-                <button type="button" class="matches-table__icon-btn" aria-label="Eliminar partido">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </button>
+                <app-edit-button (edit)="onEditMatch(entry.key, match.key, match.value)"></app-edit-button>
+                <app-delete-button></app-delete-button>
               </div>
             </div>
           </ng-container>
@@ -107,16 +90,8 @@
             <input type="text" class="matches-table__text-input" placeholder="Lugar" [(ngModel)]="newMatch.place" />
 
             <div class="matches-table__row-actions">
-              <button type="button" class="matches-table__confirm" aria-label="Confirmar" (click)="confirmAddMatch(entry.key)">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
-              <button type="button" class="matches-table__discard" aria-label="Descartar" (click)="cancelAddMatch()">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
+              <app-confirm-button (confirm)="confirmAddMatch(entry.key)"></app-confirm-button>
+              <app-discard-button (discard)="cancelAddMatch()"></app-discard-button>
             </div>
           </div>
 

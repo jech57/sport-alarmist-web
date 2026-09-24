@@ -1,0 +1,15 @@
+.delete-button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-primary-muted);
+
+  svg {
+    width: 22px;
+    height: 22px;
+    position: relative;
+    top: 1px;
+  }
+}

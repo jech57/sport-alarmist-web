@@ -1,0 +1,13 @@
+.edit-button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-primary-muted);
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
+}

@@ -6,6 +6,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddBarComponent } from '../../../shared/components/add-bar/add-bar.component';
+import { ConfirmButtonComponent } from '../../../shared/components/confirm-button/confirm-button.component';
+import { DiscardButtonComponent } from '../../../shared/components/discard-button/discard-button.component';
+import { EditButtonComponent } from '../../../shared/components/edit-button/edit-button.component';
+import { DeleteButtonComponent } from '../../../shared/components/delete-button/delete-button.component';
 import { TournamentCreateService } from '../../tournament-create/tournament-create.service';
 import type { Match } from '../../tournament-create/tournament-create.service';
 import { MatchesService } from './matches.service';
@@ -14,7 +18,7 @@ import { SuccessToastComponent } from '../../../shared/components/success-toast/
 
 @Component({
   selector: 'app-matches',
-  imports: [CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule, AddBarComponent],
+  imports: [CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule, AddBarComponent, ConfirmButtonComponent, DiscardButtonComponent, EditButtonComponent, DeleteButtonComponent],
   templateUrl: './matches.html',
   styleUrl: './matches.scss',
 })
