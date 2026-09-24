@@ -1,0 +1,21 @@
+.tournament-tabs {
+  display: flex;
+  justify-content: flex-end; // alineados a la derecha, sin pelear con Material
+  gap: 32px;
+  padding: 0 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  button {
+    all: unset;
+    cursor: pointer;
+    padding: 16px 4px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+
+    &.active {
+      color: var(--color-text);
+      border-bottom-color: var(--color-primary);
+    }
+  }
+}

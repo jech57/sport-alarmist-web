@@ -13,13 +13,13 @@ import { Tournament } from '../tournament/tournament/tournament';
   styleUrl: './home.scss',
 })
 export class Home {
-  tournaments$: ReturnType<TournamentCreateService['getAll$']>;
+  tournament$: ReturnType<TournamentCreateService['getSelected$']>;
 
   constructor(
     private dialog: MatDialog,
     private tournamentStore: TournamentCreateService
   ) {
-    this.tournaments$ = this.tournamentStore.getAll$();
+    this.tournament$ = this.tournamentStore.getSelected$();
   }
 
   openCreateTournament() {

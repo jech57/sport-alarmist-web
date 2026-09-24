@@ -64,7 +64,9 @@ p {
   --color-button-disabled: #26262B;
   --color-cancel-bg: #ffffff;
   --color-cancel-text: #6b6b76;
-  --color-green-success: #22C55E
+  --color-green-success: #22C55E;
+  --color-yellow-warning: #FFCC00;
+  --color-red-cancel: #FF3B30;
 }
 
 app-root {
@@ -97,17 +99,30 @@ app-root {
   width: auto !important;
 }
  
-.success-toast-panel .mdc-snackbar__surface {
-  background-color: #000000 !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  padding: 0 !important; // el padding real lo controlamos en success-toast.component.ts
+.app-toast-panel.mat-mdc-snack-bar-container {
   min-width: 0 !important;
   width: auto !important;
 }
  
-// Material le pone su propio padding al label interno, sumándose al nuestro
-.success-toast-panel .mdc-snackbar__label {
+.app-toast-panel .mdc-snackbar__surface {
+  background-color: #000000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  padding: 0 !important; // el padding real lo pone cada componente de toast
+  min-width: 0 !important;
+  width: auto !important;
+}
+ 
+.app-toast-panel .mdc-snackbar__label {
   padding: 0 !important;
+}
+
+.mat-datepicker-actions {
+  gap: 4px !important; // menos separación entre Cancelar y OK
+  background-color: transparent !important; // el fondo gris era de este contenedor, no de los botones
+ 
+  button {
+    border: none !important;
+  }
 }

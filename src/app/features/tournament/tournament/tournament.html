@@ -1,8 +1,11 @@
-<nav mat-tab-nav-bar [tabPanel]="tabPanel">
-  <a mat-tab-link routerLink="partidos" routerLinkActive #partidosLink="routerLinkActive" [active]="partidosLink.isActive">Partidos</a>
-  <a mat-tab-link routerLink="equipos" routerLinkActive #equiposLink="routerLinkActive" [active]="equiposLink.isActive">Equipos</a>
-  <a mat-tab-link routerLink="ajustes" routerLinkActive #ajustesLink="routerLinkActive" [active]="ajustesLink.isActive">Ajustes</a>
+<nav class="tournament-tabs">
+  <button type="button" [class.active]="activeTab === 'partidos'" (click)="setTab('partidos')">Partidos</button>
+  <button type="button" [class.active]="activeTab === 'equipos'" (click)="setTab('equipos')">Equipos</button>
+  <button type="button" [class.active]="activeTab === 'ajustes'" (click)="setTab('ajustes')">Ajustes</button>
 </nav>
-<mat-tab-nav-panel #tabPanel>
-  <router-outlet />
-</mat-tab-nav-panel>
+
+<div class="tournament-content" [ngSwitch]="activeTab">
+  <app-matches *ngSwitchCase="'partidos'"></app-matches>
+  <app-teams *ngSwitchCase="'equipos'"></app-teams>
+  <app-settings *ngSwitchCase="'ajustes'"></app-settings>
+</div>

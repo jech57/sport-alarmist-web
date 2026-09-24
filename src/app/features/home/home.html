@@ -1,8 +1,8 @@
-<ng-container *ngIf="(tournaments$ | async | keyvalue)?.length; else emptyState">
-  <app-tournament> </app-tournament>
+<ng-container *ngIf="tournament$ | async as tournament; else emptyState">
+  <app-tournament></app-tournament>
 </ng-container>
 
 <ng-template #emptyState>
   <p class="empty-state-text">Añade un torneo para empezar</p>
+  <app-empty-state-doodle class="empty-state-doodle" />
 </ng-template>
-<app-empty-state-doodle class="empty-state-doodle" />
