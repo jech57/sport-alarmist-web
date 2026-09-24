@@ -1,19 +1,17 @@
-<div class="add-bar" *ngIf="variant === 'button'; else circleVariant">
-  <app-button [label]="label" (click)="addClick.emit()"></app-button>
+<div class="add-bar" [class.add-bar--circle]="variant === 'circle'">
+  <ng-container *ngIf="variant === 'button'; else circleTemplate">
+    <app-button [label]="label" (click)="addClick.emit()"></app-button>
+  </ng-container>
 
-  <!-- aquí se proyecta lo que necesite el que use este componente:
-       un input oculto de datepicker, o lo que sea a futuro -->
-  <ng-content></ng-content>
-</div>
-
-<ng-template #circleVariant>
-  <div class="add-bar add-bar--circle">
+  <ng-template #circleTemplate>
     <button type="button" class="add-bar__circle-button" [attr.aria-label]="label" (click)="addClick.emit()">
       <svg viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg" class="add-bar__icon">
         <line x1="12" y1="2.5" x2="12" y2="21.5" />
         <line x1="2.5" y1="12" x2="21.5" y2="12" />
       </svg>
     </button>
-    <ng-content></ng-content>
-  </div>
-</ng-template>
+  </ng-template>
+
+  <!-- un solo ng-content, siempre presente, sin importar la variante -->
+  <ng-content></ng-content>
+</div>

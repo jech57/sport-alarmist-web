@@ -112,6 +112,7 @@ app-root {
   padding: 0 !important; // el padding real lo pone cada componente de toast
   min-width: 0 !important;
   width: auto !important;
+  max-width: 360px !important; // mensajes cortos se quedan ajustados; los largos hacen wrap en vez de crecer
 }
  
 .app-toast-panel .mdc-snackbar__label {
