@@ -3,14 +3,15 @@
 }
 
 .tournament-tabs {
-  // position: fixed en vez de calc()/margin-left compensado: se posiciona
-  // respecto a la VENTANA, no le importa el margin-left del panel ni ningun
-  // contenedor padre. Garantiza centrado real en toda la pantalla.
+  // position: fixed en vez de dentro del flujo normal: se posiciona
+  // respecto a la VENTANA, no le importa ningun contenedor padre — pero sí
+  // debe respetar el panel de torneos (fixed a la izquierda), así que el
+  // centrado es relativo al espacio a la derecha de var(--panel-width).
   position: fixed;
   top: var(--header-height);
-  left: 0;
-  width: 100vw;
-  box-sizing: border-box; // sin esto, el padding se suma por fuera del 100vw y descuadra el centro
+  left: var(--panel-width);
+  width: calc(100vw - var(--panel-width));
+  box-sizing: border-box; // sin esto, el padding se suma por fuera del ancho y descuadra el centro
   z-index: var(--z-content);
 
   display: flex;

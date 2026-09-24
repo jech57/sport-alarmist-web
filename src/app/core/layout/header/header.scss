@@ -1,6 +1,7 @@
 :host {
   display: block;
-  width: 100%;
+  width: calc(100% - var(--panel-width));
+  margin-left: var(--panel-width);
 }
 
 .header {
@@ -13,9 +14,24 @@
   box-sizing: border-box;
   padding: 0 32px;
   z-index: var(--z-content);
+  transition: height 0.5s ease;
 
   h1 {
     margin: 0;
+    transition: font-size 0.5s ease;
+  }
+
+  // Sin torneos todavía (pantalla de bienvenida): el header crece para que
+  // el título quede centrado en el contenido (no pegado arriba) y sea el
+  // elemento de marca más grande de la pantalla. Al crear el primer
+  // torneo, height vuelve a la barra normal y el título "sube" con la
+  // transición — no es un salto, es la misma caja achicándose.
+  &--hero {
+    height: 220px;
+  }
+
+  &__title--hero {
+    font-size: 56px;
   }
 
   &__button {

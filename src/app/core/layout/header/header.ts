@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { TournamentCreateDialog } from '../../../features/tournament-create/tournament-create-dialog';
 import { TournamentCreateService } from '../../../features/tournament-create/tournament-create.service';
@@ -20,9 +19,7 @@ export class Header {
   hasTournaments$: Observable<boolean>;
 
   constructor(private dialog: MatDialog, private tournamentStore: TournamentCreateService) {
-    this.hasTournaments$ = this.tournamentStore.getAll$().pipe(
-      map((tournaments) => Object.keys(tournaments).length > 0)
-    );
+    this.hasTournaments$ = this.tournamentStore.hasAny$();
   }
 
   onAddTournament() {

@@ -1,5 +1,5 @@
-<div class="header">
-  <h1>Manejo de torneos</h1>
+<div class="header" [class.header--hero]="!(hasTournaments$ | async)">
+  <h1 [class.header__title--hero]="!(hasTournaments$ | async)">Manejo de torneos</h1>
 
   <app-button
     *ngIf="hasTournaments$ | async"
