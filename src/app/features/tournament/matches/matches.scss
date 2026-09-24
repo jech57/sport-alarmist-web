@@ -1,8 +1,19 @@
 .matches-empty-text {
+  // centrado respecto a la VENTANA, igual que los tabs de tournament
+  // (que son position: fixed con left: 0 y width: 100vw). Si se centrara
+  // dentro del panel quedaria corrido a la derecha por el margin-left
+  // del panel.
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(var(--header-height) + 48px + 80px); // header + tabs + aire
+  margin: 0 auto; // con left/right 0 y max-width, esto lo centra
+  max-width: 480px;
+  padding: 0 16px;
+  box-sizing: border-box;
+
   text-align: center;
   color: var(--color-text-secondary);
-  margin: 80px auto 0;
-  max-width: 480px;
 }
 
 .matches-table {
@@ -37,6 +48,20 @@
     align-items: center;
     gap: 12px;
     font-weight: 500;
+    margin-bottom: 16px; // espacio antes de la primera fila de partido
+  }
+
+  // span que envuelve el h3 de la fecha (mismo patron que los h2 del header)
+  &__date-title {
+    display: inline-flex;
+    align-items: center;
+
+    h3 {
+      // sin el margen por defecto del navegador y con line-height ajustado,
+      // para que el texto quede centrado con los botones de editar/eliminar
+      margin: 0;
+      line-height: 1.2;
+    }
   }
 
   &__icon-btn {
@@ -63,9 +88,14 @@
 
   &__match-row,
   &__match-form {
+    font-size: 20px;
+  }
+
+  &__match-row,
+  &__match-form {
     position: relative; // para anclar row-actions a la derecha
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 24px; // un poco mas de aire entre filas
     padding-right: 96px; // deja espacio para los botones, para que no queden "dentro" de Confirmados
 
     // evita que texto largo (ej. en Confirmados) se desborde de su celda
@@ -77,14 +107,113 @@
     }
   }
 
-  // selects y text inputs planos, sin estilo de Material a proposito
-  &__select,
+  &__team-field {
+    width: 100%;
+
+    // campo mas compacto: Material usa 56px de alto por defecto
+    --mat-form-field-container-height: 40px;
+    --mat-form-field-container-vertical-padding: 8px;
+
+    ::ng-deep .mat-mdc-form-field-infix {
+      min-height: 40px;
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+
+    // suffix (X o triangulo) centrado verticalmente en el campo compacto
+    ::ng-deep .mat-mdc-form-field-icon-suffix {
+      align-self: center;
+      display: flex;
+      align-items: center;
+    }
+
+    ::ng-deep .mat-mdc-form-field-icon-suffix .mat-mdc-icon-button {
+      --mdc-icon-button-state-layer-size: 32px;
+      --mat-icon-button-state-layer-size: 32px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      // el svg inline se alinea a la linea base del texto y queda corrido;
+      // como bloque queda centrado de verdad
+      svg {
+        display: block;
+      }
+
+      // area tactil invisible de 48px que Material agrega y descentra el boton
+      .mat-mdc-button-touch-target {
+        display: none;
+      }
+    }
+
+    // texto del input a 20px, igual que las filas
+    --mat-form-field-container-text-size: 20px;
+
+    ::ng-deep .mat-mdc-input-element {
+      font-size: 20px;
+    }
+
+    // quita el padding/margen extra que mat-form-field reserva para hints
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    ::ng-deep .mdc-notched-outline__leading,
+    ::ng-deep .mdc-notched-outline__notch,
+    ::ng-deep .mdc-notched-outline__trailing {
+      border-color: var(--color-primary-muted) !important;
+    }
+
+    // la X de limpiar: Material pinta el icon-button con su propio token,
+    // por eso se sobreescribe el token ademas del color
+    ::ng-deep .mat-mdc-form-field-icon-suffix .mat-mdc-icon-button {
+      --mat-icon-button-icon-color: var(--color-primary-muted);
+      color: var(--color-primary-muted) !important;
+    }
+
+    // hint "Equipo 1"/"Equipo 2" en gris, igual que los demas campos.
+    // Apuntamos directo a la clase real del input de Material (mas
+    // especifico que "input::placeholder" solo, que no le estaba ganando).
+    ::ng-deep .mat-mdc-input-element::placeholder {
+      color: var(--color-text-secondary) !important;
+      opacity: 1 !important;
+    }
+  }
+
+  // triangulo del selector sin valor: gris; al abrir el panel gira y
+  // se pone primary
+  &__select-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+
+    svg {
+      display: block;
+      transition: transform 0.15s ease;
+    }
+
+    &--open {
+      color: var(--color-primary);
+
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  // text inputs planos, sin estilo de Material a proposito
   &__text-input {
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--color-text-secondary);
     color: var(--color-text);
-    font-size: 16px;
+    font-size: 20px;
     padding: 4px 0;
 
     &:focus {
@@ -108,12 +237,12 @@
     gap: 6px;
 
     input {
-      width: 32px;
+      width: 36px;
       background: transparent;
       border: none;
       border-bottom: 1px solid var(--color-text-secondary);
       color: var(--color-text);
-      font-size: 16px;
+      font-size: 20px;
       text-align: center;
       padding: 4px 0;
 
@@ -176,6 +305,10 @@
     width: 100%;
     padding-right: 96px;
     box-sizing: border-box;
+    // padding (no margin): los margenes verticales entre hermanos se colapsan,
+    // asi que margin-top: 24px + margin-bottom: 16px de la fila daba solo 24px
+    // el margin-bottom de la ultima fila ya da la mayor parte del espacio
+    padding-top: 8px;
   }
 
   &__hidden-date-input {
@@ -190,5 +323,17 @@
     border: none;
     padding: 0;
     margin: 0;
+  }
+}
+
+// el panel del autocomplete vive en el overlay (fuera del componente),
+// por eso va con ::ng-deep. Estilo del hint "Equipo 1"/"Equipo 2".
+::ng-deep .matches-autocomplete-panel .matches-autocomplete-hint {
+  opacity: 1;
+  cursor: default;
+
+  .mdc-list-item__primary-text {
+    color: var(--color-text-secondary) !important;
+    font-style: italic;
   }
 }
