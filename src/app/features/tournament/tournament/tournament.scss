@@ -1,21 +1,40 @@
+:host {
+  display: block;
+}
+
 .tournament-tabs {
+  // position: fixed en vez de calc()/margin-left compensado: se posiciona
+  // respecto a la VENTANA, no le importa el margin-left del panel ni ningun
+  // contenedor padre. Garantiza centrado real en toda la pantalla.
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: 100vw;
+  box-sizing: border-box; // sin esto, el padding se suma por fuera del 100vw y descuadra el centro
+  z-index: var(--z-content);
+
   display: flex;
-  justify-content: flex-end; // alineados a la derecha, sin pelear con Material
+  justify-content: center;
   gap: 32px;
   padding: 0 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   button {
     all: unset;
     cursor: pointer;
-    padding: 16px 4px;
+    padding: 16px 4px 6px; // menos padding abajo = linea mas pegada al texto
     color: var(--color-text-secondary);
-    font-weight: 600;
+    font-weight: 400; // sin negrilla
     border-bottom: 2px solid transparent;
 
     &.active {
       color: var(--color-text);
-      border-bottom-color: var(--color-primary);
+      border-bottom-color: #ffffff; // barra blanca en vez de naranja
     }
   }
+}
+
+.tournament-content {
+  // compensa el espacio que el nav (ahora position:fixed) deja de ocupar
+  // en el flujo normal, para que el contenido no quede tapado debajo
+  margin-top: 48px; // ajusta este numero segun la altura real del nav
 }

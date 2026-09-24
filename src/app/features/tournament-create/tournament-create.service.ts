@@ -2,9 +2,18 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+export interface Match {
+  team1: string;
+  team2: string;
+  time: string; // ej. "07:30 AM"
+  place: string;
+  confirmed: boolean;
+}
+
 export interface MatchDate {
   date: string; // ISO string
   count: number; // cantidad de partidos en esa fecha
+  matches: Record<string, Match>;
 }
 
 export interface Tournament {
