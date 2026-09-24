@@ -48,7 +48,7 @@ export class TournamentCreateDialog {
 
     this.snackBar.openFromComponent(SuccessToastComponent, {
       data: { message: 'Torneo creado exitosamente' },
-      panelClass: 'success-toast-panel',
+      panelClass: 'app-toast-panel',
       duration: 3000,
       horizontalPosition: 'end',
       verticalPosition: 'bottom'

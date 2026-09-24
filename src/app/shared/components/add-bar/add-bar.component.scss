@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.add-bar {
+  position: relative;
+  display: inline-block;
+
+  // variante circulo: linea divisora completa con el boton + en medio
+  &--circle {
+    display: block;
+    width: 100%;
+    height: 2px; // grosor de la linea - sube este numero para mas gruesa
+    background-color: var(--color-primary-muted);
+    margin: 24px 0;
+  }
+
+  &__circle-button {
+    all: unset;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary-muted); // grosor del borde del circulo
+    background-color: var(--color-bg, #0e0e12);
+    color: var(--color-primary-muted);
+    cursor: pointer;
+  }
+
+  &__icon line {
+    stroke: currentColor;
+    stroke-width: 2px; // grosor de la cruz (+)
+  }
+}

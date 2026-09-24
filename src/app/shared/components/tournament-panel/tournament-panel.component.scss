@@ -12,9 +12,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  // padding-top = (altura del header - altura del item) / 2
-  // esto centra el primer item exactamente en el mismo eje que el boton del header,
-  // sea cual sea --header-height. Si --header-height cambia, esto se recalcula solo.
   padding: calc((var(--header-height) - 40px) / 2) 10px 10px;
   gap: 4px;
   // sin background-color: el panel en sí es transparente, se ven los puntos de fondo
