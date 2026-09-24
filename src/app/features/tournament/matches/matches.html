@@ -11,15 +11,15 @@
 
       <div class="matches-table__date-group" *ngFor="let entry of tournament.matches | keyvalue">
         <div class="matches-table__date-row">
-          <span>{{ formatDate(entry.value.date) }} ({{ entry.value.count }})</span>
+          <span class="matches-table__date-title"><h3>{{ formatDate(entry.value.date) }} ({{ entry.value.count }})</h3></span>
 
           <!-- editar/eliminar fecha, con el mismo gap que row-actions (8px) -->
           <div class="matches-table__row-actions matches-table__row-actions--inline">
             <span class="matches-table__date-edit-wrapper">
-              <app-edit-button (edit)="onEditDateClick(entry.value.date); dateDp.open()"></app-edit-button>
+              <app-edit-button (edit)="openDatePickerFor(dateDp)"></app-edit-button>
               <input
                 [matDatepicker]="dateDp"
-                [(ngModel)]="editDateValue"
+                [value]="asDate(entry.value.date)"
                 (dateChange)="onDateChanged(entry.key, $event.value)"
                 class="matches-table__hidden-date-input"
               />
@@ -43,8 +43,8 @@
             aria-label="Colapsar"
             (click)="toggleCollapse(entry.key)"
           >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <svg viewBox="0 0 19 19" width="19" height="19" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="3,4.5 16,4.5 9.5,14.5" />
             </svg>
           </button>
         </div>
@@ -67,15 +67,83 @@
           </ng-container>
 
           <div class="matches-table__match-form" *ngIf="addingMatchDateId === entry.key">
-            <select class="matches-table__select" [(ngModel)]="newMatch.team1">
-              <option value="" disabled selected>Equipo 1</option>
-              <option *ngFor="let team of teamsFor('team1')" [value]="team">{{ team }}</option>
-            </select>
+            <mat-form-field appearance="outline" class="matches-table__team-field">
+              <input
+                type="text"
+                matInput
+                placeholder="Equipo 1"
+                [matAutocomplete]="autoTeam1"
+                #teamInput1
+                #trigger1="matAutocompleteTrigger"
+                [(ngModel)]="newMatch.team1"
+              />
+              <span
+                *ngIf="!newMatch.team1"
+                matSuffix
+                class="matches-table__select-arrow"
+                [class.matches-table__select-arrow--open]="autoTeam1.isOpen"
+                (click)="$event.stopPropagation(); teamInput1.focus(); trigger1.openPanel()"
+              >
+                <svg viewBox="0 0 10 10" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="3,1.5 8,5 3,8.5" fill="currentColor" />
+                </svg>
+              </span>
+              <button
+                *ngIf="newMatch.team1"
+                type="button"
+                mat-icon-button
+                matSuffix
+                aria-label="Limpiar"
+                (click)="clearTeam('team1')"
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </mat-form-field>
+            <mat-autocomplete #autoTeam1="matAutocomplete" panelClass="matches-autocomplete-panel">
+              <mat-option disabled class="matches-autocomplete-hint">Equipo 1</mat-option>
+              <mat-option *ngFor="let team of teamsFor('team1')" [value]="team">{{ team }}</mat-option>
+            </mat-autocomplete>
 
-            <select class="matches-table__select" [(ngModel)]="newMatch.team2">
-              <option value="" disabled selected>Equipo 2</option>
-              <option *ngFor="let team of teamsFor('team2')" [value]="team">{{ team }}</option>
-            </select>
+            <mat-form-field appearance="outline" class="matches-table__team-field">
+              <input
+                type="text"
+                matInput
+                placeholder="Equipo 2"
+                [matAutocomplete]="autoTeam2"
+                #teamInput2
+                #trigger2="matAutocompleteTrigger"
+                [(ngModel)]="newMatch.team2"
+              />
+              <span
+                *ngIf="!newMatch.team2"
+                matSuffix
+                class="matches-table__select-arrow"
+                [class.matches-table__select-arrow--open]="autoTeam2.isOpen"
+                (click)="$event.stopPropagation(); teamInput2.focus(); trigger2.openPanel()"
+              >
+                <svg viewBox="0 0 10 10" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="3,1.5 8,5 3,8.5" fill="currentColor" />
+                </svg>
+              </span>
+              <button
+                *ngIf="newMatch.team2"
+                type="button"
+                mat-icon-button
+                matSuffix
+                aria-label="Limpiar"
+                (click)="clearTeam('team2')"
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </mat-form-field>
+            <mat-autocomplete #autoTeam2="matAutocomplete" panelClass="matches-autocomplete-panel">
+              <mat-option disabled class="matches-autocomplete-hint">Equipo 2</mat-option>
+              <mat-option *ngFor="let team of teamsFor('team2')" [value]="team">{{ team }}</mat-option>
+            </mat-autocomplete>
 
             <div class="matches-table__time">
               <input type="text" inputmode="numeric" maxlength="2" placeholder="HH" [(ngModel)]="newMatch.hour" (input)="onlyDigits($event, 'hour')" (blur)="clampHour()" />

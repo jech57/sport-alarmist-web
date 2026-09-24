@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddBarComponent } from '../../../shared/components/add-bar/add-bar.component';
 import { ConfirmButtonComponent } from '../../../shared/components/confirm-button/confirm-button.component';
@@ -18,7 +21,21 @@ import { SuccessToastComponent } from '../../../shared/components/success-toast/
 
 @Component({
   selector: 'app-matches',
-  imports: [CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule, MatButtonModule, AddBarComponent, ConfirmButtonComponent, DiscardButtonComponent, EditButtonComponent, DeleteButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    AddBarComponent,
+    ConfirmButtonComponent,
+    DiscardButtonComponent,
+    EditButtonComponent,
+    DeleteButtonComponent
+  ],
   templateUrl: './matches.html',
   styleUrl: './matches.scss',
 })
@@ -43,8 +60,11 @@ export class Matches {
   // si estamos editando un partido existente en vez de creando uno nuevo
   editingMatchId: string | null = null;
 
-  // valor precargado en el mini-calendario de editar fecha
-  editDateValue: Date | null = null;
+  // convierte el ISO string de cada fecha a Date, para el [value] del picker
+  // (uno por fila - ya NO hay una sola variable compartida entre todas)
+  asDate(iso: string): Date {
+    return new Date(iso);
+  }
 
   // ids de fechas colapsadas (sus partidos ocultos)
   private collapsedDateIds = new Set<string>();
@@ -90,6 +110,10 @@ export class Matches {
   teamsFor(field: 'team1' | 'team2'): string[] {
     const otherValue = field === 'team1' ? this.newMatch.team2 : this.newMatch.team1;
     return this.placeholderTeams.filter((team) => team !== otherValue);
+  }
+
+  clearTeam(field: 'team1' | 'team2'): void {
+    this.newMatch[field] = '';
   }
 
   onAddMatch(dateId: string): void {
@@ -209,9 +233,10 @@ export class Matches {
     this.editingMatchId = null;
   }
 
-  onEditDateClick(currentDateIso: string): void {
-    // precarga el calendario con la fecha actual del grupo
-    this.editDateValue = new Date(currentDateIso);
+  openDatePickerFor(picker: MatDatepicker<Date>): void {
+    // el [value] del input ya viene directo de entry.value.date (ver html),
+    // asi que no hay nada que precargar aqui - solo abrir
+    picker.open();
   }
 
   onDateChanged(dateId: string, newDate: Date | null): void {

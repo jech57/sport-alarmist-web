@@ -47,6 +47,11 @@ h2 {
   color: var(--color-text);
 }
 
+h3 {
+  font-size: 25px;
+  color: var(--color-text);
+}
+
 p {
   font-size: 20px;
   color: var(--color-text);
@@ -125,5 +130,22 @@ app-root {
  
   button {
     border: none !important;
+  }
+}
+ 
+// Solo el circulo del dia seleccionado usa --color-primary. El resto del
+// calendario (fondo, numeros, "hoy") se queda con el estilo por defecto
+// de Material - intentar forzarlo todo a blanco/negro no funcionó.
+.matches-datepicker-panel .mat-calendar-body-selected {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+}
+
+.matches-autocomplete-panel {
+  background-color: #ffffff !important;
+ 
+  .mat-mdc-option {
+    color: #000000 !important;
   }
 }
