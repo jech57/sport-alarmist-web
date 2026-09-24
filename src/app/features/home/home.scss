@@ -3,17 +3,121 @@ app-tournament {
   margin-left: var(--panel-width);
 }
 
-.empty-state-text {
+.empty-state {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  color: var(--color-text-secondary);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.empty-state-doodle {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+.empty-state__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 1;
+}
+
+.empty-state__hello {
+  margin: 0;
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+  cursor: default;
+  transition: transform 0.25s ease, text-shadow 0.25s ease, color 0.25s ease;
+
+  &:hover {
+    transform: scale(1.06);
+    color: var(--color-primary-muted);
+    text-shadow: 0 0 46px rgba(255, 106, 0, 0.6);
+  }
+}
+
+.empty-state__subtitle {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: 640px;
+}
+
+.empty-state__lead {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.empty-state__cta {
+  // El CTA es la única acción posible en esta pantalla: debe ser lo primero
+  // que se vea, así que va a escala grande en vez de agregar un input
+  // "size" al componente compartido para un caso de uso único.
+  transform: scale(1.6);
+  margin: 6px 0 4px;
+}
+
+// Las 4 bandas ya existentes se turnan en el mismo lugar (crossfade) en
+// vez de ir encogidas lado a lado o sueltas en una esquina: a este tamaño
+// se lee cada ícono, y la alternancia comunica "torneos gestionándose en
+// paralelo" sin agregar texto ni SVGs nuevos.
+.empty-state__carousel {
+  position: relative;
+  width: 640px;
+  height: 205px;
+}
+
+.empty-state__slide {
+  display: block;
+  position: absolute;
+  inset: 0;
+  animation: empty-state-carousel-cycle 12s ease-in-out infinite;
+
+  ::ng-deep .illustration-band,
+  ::ng-deep .empty-state-doodle {
+    width: 640px;
+    height: 205px;
+  }
+}
+
+.empty-state__slide--a {
+  animation-delay: 0s;
+}
+
+.empty-state__slide--b {
+  animation-delay: -3s;
+}
+
+.empty-state__slide--c {
+  animation-delay: -6s;
+}
+
+.empty-state__slide--d {
+  animation-delay: -9s;
+}
+
+@keyframes empty-state-carousel-cycle {
+  0%, 21% {
+    opacity: 1;
+  }
+  25%, 96% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-state__slide {
+    animation: none;
+  }
+
+  .empty-state__slide--b,
+  .empty-state__slide--c,
+  .empty-state__slide--d {
+    opacity: 0;
+  }
 }

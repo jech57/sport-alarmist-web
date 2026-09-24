@@ -2,6 +2,7 @@
   <h1>Manejo de torneos</h1>
 
   <app-button
+    *ngIf="hasTournaments$ | async"
     class="header__button"
     label="Añadir torneo"
     icon="emoji_events"

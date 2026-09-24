@@ -3,6 +3,31 @@
 </ng-container>
 
 <ng-template #emptyState>
-  <p class="empty-state-text">Añade un torneo para empezar</p>
-  <app-empty-state-doodle class="empty-state-doodle" />
+  <div class="empty-state">
+    <div class="empty-state__content">
+      <h1 class="empty-state__hello">Bienvenido</h1>
+      <p class="empty-state__subtitle">
+        Gestiona y organiza tus torneos, y avisa a todos los interesados.<br>
+        Fácil, rápido y a cualquier escala.
+      </p>
+
+      <p class="empty-state__lead">Inicia creando un torneo.</p>
+      <app-button
+        class="empty-state__cta"
+        label="Añadir torneo"
+        icon="emoji_events"
+        (click)="openCreateTournament()"
+      ></app-button>
+
+      <!-- Carrusel: las 4 bandas que ya existen se turnan en el mismo
+           lugar (crossfade), cada una visible por igual — sin agregar
+           texto, sin SVGs nuevos. -->
+      <div class="empty-state__carousel">
+        <app-empty-state-doodle class="empty-state__slide empty-state__slide--a" />
+        <app-illustration-band-trofeo class="empty-state__slide empty-state__slide--b" />
+        <app-illustration-band-calendario class="empty-state__slide empty-state__slide--c" />
+        <app-illustration-band-cronometro class="empty-state__slide empty-state__slide--d" />
+      </div>
+    </div>
+  </div>
 </ng-template>
