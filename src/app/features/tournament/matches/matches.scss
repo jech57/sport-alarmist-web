@@ -21,6 +21,7 @@
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 32px;
+    padding-right: 96px; // mismo espacio que las filas, para que las columnas calcen
 
     h2 {
       margin: 0; // el navegador le pone margen por defecto a los h2, esto lo quita
@@ -160,26 +161,13 @@
     gap: 8px;
   }
 
-  &__confirm,
-  &__discard {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-
-  &__confirm {
-    color: #ffffff;
-    background-color: #2e7d32; // verde - ajusta si tienes tu propia variable
-  }
-
-  &__discard {
-    color: #ffffff;
-    background-color: #c62828; // rojo - ajusta si tienes tu propia variable
+  // en el date-row se reusa el mismo grupo, pero NO como position:absolute
+  // (ahi ya vive dentro de un flex normal, junto al texto de la fecha),
+  // y con menos gap (ajusta este numero si aun se ven muy separados)
+  &__row-actions--inline {
+    position: static;
+    transform: none;
+    gap: 4px;
   }
 
   // mismo espacio reservado que las filas, para que la barra termine

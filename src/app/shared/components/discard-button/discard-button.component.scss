@@ -1,0 +1,17 @@
+.discard-button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: var(--color-red-discard);
+
+  svg {
+    width: 13px; 
+    height: 13px;
+  }
+}
