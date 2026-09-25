@@ -49,7 +49,17 @@ ng serve
 Para ver detalladamente qué cambios hizo cada integrante, puede dirijirse al apartado de [Pull Requests](https://github.com/jech57/sport-alarmist-web/pulls?q=is%3Apr+state%3Aclosed). Allí también podrá encontrar fotos de los modificaciones que fueron siendo agregadas. Además, debajo puede encontrar el listado de las pantallas que desarrolló cada uno.
 
 ### 👩‍💻 Laura
--
+- Agregar torneo
+- Ver partidos
+- Agregar fecha
+- Editar fecha
+- Agregar partido
+- Editar partido
 
 ### 👨‍💻 Javier
--
+- Pantalla inicial
+- Ver equipos
+- Borrar equipo
+- Borrar partido
+- Borrar fecha
+- Ajustes
