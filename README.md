@@ -9,6 +9,7 @@ Alerts — app web para gestionar torneos deportivos de barrio: inscripción de 
 4. [Distribución de trabajo](#distribución-de-trabajo)
 
 ## Instalación y ejecución
+1. 
 
 ## Recomendaciones
 
@@ -16,10 +17,10 @@ Alerts — app web para gestionar torneos deportivos de barrio: inscripción de 
 
 | # | Versión de mockup | Cambio | Justificación |
 |---|-------------------|--------|---------------|
-|   |                   |        |               |
+| 1 |                   |        |               |
 
 ## Distribución de trabajo
-Para ver detalladamente qué cambios hizo cada integrante, puede dirijirse al apartado de [Pull Requests](https://github.com/jech57/sport-alarmist-web/pulls). Además, debajo puede encontrar el listado de las pantallas que desarrolló cada uno.
+Para ver detalladamente qué pantallas hizo cada integrante, puede dirijirse al apartado de [Pull Requests](https://github.com/jech57/sport-alarmist-web/pulls?q=is%3Apr+state%3Aclosed). Allí también podrá encontrar fotos de los cambios que fueron siendo agregados. Además, debajo puede encontrar el listado de las pantallas que desarrolló cada uno.
 
 ### 👩‍💻 Laura
 -
