@@ -1,1 +1,77 @@
-<h2>Equipos</h2>
+<ng-container *ngIf="tournament$ | async as tournament">
+  <div class="teams-table">
+    <div class="teams-table__header">
+      <span><p>Escudo</p></span>
+      <span><p>Nombre</p></span>
+      <span>
+        <p>Contraseña</p>
+        <app-info-tooltip
+          class="teams-table__info"
+          text="Esta contraseña asegura que solo los jugadores que la conozcan puedan inscribirse al equipo. No olvides compartirla con ellos."
+        ></app-info-tooltip>
+      </span>
+      <span><p>Jugadores</p></span>
+    </div>
+
+    <div class="teams-table__row" *ngFor="let entry of tournament.teamsList | keyvalue">
+      <span class="teams-table__badge">
+        <app-icon-team-badge-triangulo *ngIf="entry.value.badge === 'triangulo'" [size]="44"></app-icon-team-badge-triangulo>
+        <app-icon-team-badge-estrella *ngIf="entry.value.badge === 'estrella'" [size]="44"></app-icon-team-badge-estrella>
+        <!-- equipos creados antes de que existiera el picker de escudo -->
+        <svg *ngIf="!entry.value.badge" viewBox="0 0 24 24" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3L20 6V11C20 16 16.5 19.5 12 21C7.5 19.5 4 16 4 11V6L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <span>{{ entry.value.name }}</span>
+      <span class="teams-table__password-cell">
+        <span class="teams-table__password-value">
+          {{ visiblePasswords.has(entry.key) ? entry.value.password : maskedPassword(entry.value.password) }}
+        </span>
+        <button
+          type="button"
+          class="teams-table__eye-btn"
+          (click)="togglePasswordVisibility(entry.key)"
+          [attr.aria-label]="visiblePasswords.has(entry.key) ? 'Ocultar contraseña' : 'Ver contraseña'"
+        >
+          <svg *ngIf="!visiblePasswords.has(entry.key)" viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+          <svg *ngIf="visiblePasswords.has(entry.key)" viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" />
+            <path d="M4 4l16 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <span class="teams-table__players-cell">
+        <button type="button" class="teams-table__players-link" (click)="openPlayersDialog(entry.value.name)">Ver</button>
+      </span>
+      <div class="teams-table__row-actions">
+        <app-delete-button (delete)="removeTeam(entry.key)"></app-delete-button>
+      </div>
+    </div>
+
+    <div class="teams-table__form" *ngIf="addingTeam">
+      <button type="button" class="teams-table__badge teams-table__badge--pick" (click)="openBadgePicker()" aria-label="Elegir escudo">
+        <app-icon-team-badge-triangulo *ngIf="newTeam.badge === 'triangulo'" [size]="44"></app-icon-team-badge-triangulo>
+        <app-icon-team-badge-estrella *ngIf="newTeam.badge === 'estrella'" [size]="44"></app-icon-team-badge-estrella>
+        <!-- nube con flecha hacia arriba, en vez del "+" -->
+        <svg *ngIf="!newTeam.badge" viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.5 17a4 4 0 1 1 .4-8 5.5 5.5 0 0 1 10.6 1.5A3.5 3.5 0 0 1 17 17H6.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 20v-9M9 14l3-3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <input type="text" class="teams-table__text-input" placeholder="Nombre" [(ngModel)]="newTeam.name" />
+      <input type="password" class="teams-table__text-input" placeholder="Contraseña" [(ngModel)]="newTeam.password" />
+      <div class="teams-table__row-actions">
+        <app-confirm-button (confirm)="confirmAddTeam()"></app-confirm-button>
+        <app-discard-button (discard)="cancelAddTeam()"></app-discard-button>
+      </div>
+    </div>
+
+    <app-add-bar variant="circle" label="Añadir equipo" (addClick)="onAddTeam()"></app-add-bar>
+  </div>
+
+  <app-illustration-band-trofeo class="teams-illustration" />
+</ng-container>

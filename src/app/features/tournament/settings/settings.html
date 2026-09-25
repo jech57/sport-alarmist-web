@@ -1,1 +1,21 @@
-<h2>Ajustes</h2>
+<div class="settings">
+  <mat-form-field appearance="outline" class="settings__field">
+    <mat-label>Nombre del torneo</mat-label>
+    <input matInput [(ngModel)]="name" />
+  </mat-form-field>
+
+  <div class="settings__checkbox-row">
+    <mat-checkbox [(ngModel)]="enableRegistrations">Habilitar inscripciones</mat-checkbox>
+    <app-info-tooltip
+      class="settings__info-icon"
+      text="Si habilitas esta opción, el torneo será visible para los jugadores. Si no la habilitas, no aparecerá para que se inscriban."
+    ></app-info-tooltip>
+  </div>
+
+  <div class="settings__actions">
+    <app-button label="Cancelar" variant="neutral" (click)="cancel()"></app-button>
+    <app-button label="Guardar" (click)="save()"></app-button>
+  </div>
+</div>
+
+<app-empty-state-doodle class="settings-illustration" />

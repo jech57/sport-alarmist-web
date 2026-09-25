@@ -14,9 +14,9 @@ import { TournamentCreateService } from './features/tournament-create/tournament
   styleUrl: './app.scss'
 })
 export class App {
-  // Sin torneos no hay nada que listar: el panel no se muestra y
-  // --panel-width pasa a 0 para que el resto del layout (header, tabs,
-  // el empty state de Home) centre respecto al ancho real de la pantalla.
+  // Sin torneos no hay nada que listar: el panel no se muestra (*ngIf en
+  // app.html) y el layout flex le da todo el ancho a la columna de
+  // contenido automáticamente.
   hasTournaments$: Observable<boolean>;
 
   constructor(private tournamentStore: TournamentCreateService) {

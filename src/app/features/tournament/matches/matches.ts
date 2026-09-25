@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, KeyValue } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -8,16 +8,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { AddBarComponent } from '../../../shared/components/add-bar/add-bar.component';
+import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { ConfirmButtonComponent } from '../../../shared/components/confirm-button/confirm-button.component';
 import { DiscardButtonComponent } from '../../../shared/components/discard-button/discard-button.component';
 import { EditButtonComponent } from '../../../shared/components/edit-button/edit-button.component';
 import { DeleteButtonComponent } from '../../../shared/components/delete-button/delete-button.component';
 import { TournamentCreateService } from '../../tournament-create/tournament-create.service';
-import type { Match } from '../../tournament-create/tournament-create.service';
+import type { Match, MatchDate } from '../../tournament-create/tournament-create.service';
 import { MatchesService } from './matches.service';
 import { WarningToastComponent } from '../../../shared/components/warning-toast/warning-toast.component';
 import { SuccessToastComponent } from '../../../shared/components/success-toast/success-toast.component';
+import { IllustrationBandCalendario } from '../../../shared/illustrations/illustration-band-calendario/illustration-band-calendario';
 
 @Component({
   selector: 'app-matches',
@@ -34,7 +37,8 @@ import { SuccessToastComponent } from '../../../shared/components/success-toast/
     ConfirmButtonComponent,
     DiscardButtonComponent,
     EditButtonComponent,
-    DeleteButtonComponent
+    DeleteButtonComponent,
+    IllustrationBandCalendario
   ],
   templateUrl: './matches.html',
   styleUrl: './matches.scss',
@@ -50,9 +54,9 @@ export class Matches {
 
   private selectedTournamentId: string | null = null;
 
-  // TODO: reemplazar por los equipos reales del torneo cuando exista
-  // el servicio de Equipos. Por ahora son solo placeholders.
-  readonly placeholderTeams = ['Equipo A', 'Equipo B', 'Equipo C', 'Equipo D'];
+  // nombres de los equipos reales del torneo seleccionado (Equipos), para
+  // los selects de "Equipo 1"/"Equipo 2" al agregar un partido
+  private teamNames: string[] = [];
 
   // qué fecha tiene el formulario de "agregar partido" abierto (null = ninguna)
   addingMatchDateId: string | null = null;
@@ -65,6 +69,22 @@ export class Matches {
   asDate(iso: string): Date {
     return new Date(iso);
   }
+
+  // orden para el keyvalue pipe: de hoy en adelante, de más cercana a más
+  // lejana; las que ya pasaron van al final. Sin esto, keyvalue ordena por
+  // el dateId (un uuid random), o sea sin ningún orden real.
+  sortDateEntries = (a: KeyValue<string, MatchDate>, b: KeyValue<string, MatchDate>): number => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dateA = new Date(a.value.date);
+    const dateB = new Date(b.value.date);
+    const aIsPast = dateA < today;
+    const bIsPast = dateB < today;
+
+    if (aIsPast !== bIsPast) return aIsPast ? 1 : -1;
+    return dateA.getTime() - dateB.getTime();
+  };
 
   // ids de fechas colapsadas (sus partidos ocultos)
   private collapsedDateIds = new Set<string>();
@@ -100,17 +120,43 @@ export class Matches {
   constructor(
     private tournamentStore: TournamentCreateService,
     private matchesService: MatchesService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     this.tournament$ = this.tournamentStore.getSelected$();
     this.tournamentStore.getSelectedId$().subscribe((id) => (this.selectedTournamentId = id));
+    this.tournament$.subscribe((tournament) => {
+      this.teamNames = tournament ? Object.values(tournament.teamsList ?? {}).map((team) => team.name) : [];
+    });
   }
 
   // el equipo ya elegido en el otro select no debe aparecer como opcion
   teamsFor(field: 'team1' | 'team2'): string[] {
     const otherValue = field === 'team1' ? this.newMatch.team2 : this.newMatch.team1;
-    return this.placeholderTeams.filter((team) => team !== otherValue);
+    return this.teamNames.filter((team) => team !== otherValue);
   }
+
+  // deshabilita en "Añadir fecha" los días que ya tienen una fecha creada
+  dateFilter = (d: Date | null): boolean => {
+    if (!d || !this.selectedTournamentId) return true;
+    return !this.matchesService.hasDateOnDay(this.selectedTournamentId, d);
+  };
+
+  // qué fecha se está reagendando ahora, para que dateFilterForEdit no la
+  // bloquee a sí misma (la setea openDatePickerFor antes de abrir)
+  private editingDateId: string | null = null;
+
+  // idem que dateFilter pero excluyendo editingDateId. Tiene que ser UNA
+  // sola función estable (no una que el template cree de nuevo llamando
+  // dateFilterExcluding(entry.key) en cada change detection): con una
+  // referencia nueva en cada ciclo, un click sintético/instantáneo la
+  // alcanza a tiempo, pero un click real de mouse (que toma más) cae
+  // justo cuando Material está re-creando el calendario por el input
+  // que cambió, y el click se pierde sin seleccionar nada.
+  dateFilterForEdit = (d: Date | null): boolean => {
+    if (!d || !this.selectedTournamentId) return true;
+    return !this.matchesService.hasDateOnDay(this.selectedTournamentId, d, this.editingDateId ?? undefined);
+  };
 
   clearTeam(field: 'team1' | 'team2'): void {
     this.newMatch[field] = '';
@@ -142,6 +188,60 @@ export class Matches {
 
   setAmPm(value: 'AM' | 'PM'): void {
     this.newMatch.ampm = value;
+  }
+
+  onDeleteDate(dateId: string): void {
+    if (!this.selectedTournamentId) return;
+
+    this.dialog
+      .open(ConfirmDialog, {
+        panelClass: 'tournament-create-panel',
+        data: {
+          title: '¿Desea borrar esta fecha?',
+          message: 'Esto eliminará los partidos asociados. Esta acción no se puede deshacer.'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed || !this.selectedTournamentId) return;
+
+        this.matchesService.deleteMatchDate(this.selectedTournamentId, dateId);
+
+        this.snackBar.openFromComponent(SuccessToastComponent, {
+          data: { message: 'Fecha eliminada' },
+          panelClass: 'app-toast-panel',
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom'
+        });
+      });
+  }
+
+  onDeleteMatch(dateId: string, matchId: string): void {
+    if (!this.selectedTournamentId) return;
+
+    this.dialog
+      .open(ConfirmDialog, {
+        panelClass: 'tournament-create-panel',
+        data: {
+          title: '¿Desea borrar este partido?',
+          message: 'Esta acción no se puede deshacer.'
+        }
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed || !this.selectedTournamentId) return;
+
+        this.matchesService.deleteMatch(this.selectedTournamentId, dateId, matchId);
+
+        this.snackBar.openFromComponent(SuccessToastComponent, {
+          data: { message: 'Partido eliminado' },
+          panelClass: 'app-toast-panel',
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom'
+        });
+      });
   }
 
   onlyDigits(event: Event, field: 'hour' | 'minute'): void {
@@ -233,9 +333,10 @@ export class Matches {
     this.editingMatchId = null;
   }
 
-  openDatePickerFor(picker: MatDatepicker<Date>): void {
+  openDatePickerFor(picker: MatDatepicker<Date>, dateId: string): void {
     // el [value] del input ya viene directo de entry.value.date (ver html),
     // asi que no hay nada que precargar aqui - solo abrir
+    this.editingDateId = dateId;
     picker.open();
   }
 
@@ -302,10 +403,10 @@ export class Matches {
       this.picker.open();
       return;
     } else if (this.selectedTournamentId) {
-      this.matchesService.addMatchDate(this.selectedTournamentId, this.selectedDate);
+      const result = this.matchesService.addMatchDate(this.selectedTournamentId, this.selectedDate);
 
       this.snackBar.openFromComponent(SuccessToastComponent, {
-        data: { message: 'Fecha creada exitosamente' },
+        data: { message: result?.isNew ? 'Fecha creada exitosamente' : 'Esa fecha ya estaba en la lista' },
         panelClass: 'app-toast-panel',
         duration: 3000,
         horizontalPosition: 'end',

@@ -1,13 +1,7 @@
 .matches-empty-text {
-  // centrado respecto a la VENTANA, igual que los tabs de tournament
-  // (que son position: fixed con left: 0 y width: 100vw). Si se centrara
-  // dentro del panel quedaria corrido a la derecha por el margin-left
-  // del panel.
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: calc(var(--header-height) + 48px + 80px); // header + tabs + aire
-  margin: 0 auto; // con left/right 0 y max-width, esto lo centra
+  // en flujo normal: ya no hace falta calcular su posición contra el
+  // sidebar/header/tabs, esos ya no son fixed
+  margin: 80px auto 0;
   max-width: 480px;
   padding: 0 16px;
   box-sizing: border-box;
@@ -16,26 +10,43 @@
   color: var(--color-text-secondary);
 }
 
+// decorativa, misma banda que ya usa Home, elegida acá porque Partidos gira
+// en torno a fechas (calendario). En flujo normal (no fixed) para que
+// siempre aparezca al final del scroll, sin depender de cuánto contenido
+// haya arriba ni superponerse con la última fila.
+.matches-illustration {
+  display: block;
+  margin: 32px 32px 48px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .matches-table {
   padding: 48px 32px 0;
-  // sin width:fit-content: vuelve a ocupar el ancho disponible completo
+  // el ancho/centrado ya lo da .tournament-content (contenedor compartido
+  // por Partidos/Equipos/Ajustes), no hace falta repetirlo acá
 
   &__header,
   &__match-row,
   &__match-form {
     display: grid;
     grid-template-columns: 1fr 1fr 0.6fr 0.8fr 1fr;
-    gap: 24px;
+    gap: 10px;
+    align-items: center;
   }
 
   &__header {
-    font-size: 24px;
     font-weight: 700;
     margin-bottom: 32px;
-    padding-right: 96px; // mismo espacio que las filas, para que las columnas calcen
 
-    h2 {
-      margin: 0; // el navegador le pone margen por defecto a los h2, esto lo quita
+    // antes era un <h2>: el h2 global (styles.scss) fija font-size:30px en
+    // el propio elemento, así que el font-size heredado de aquí nunca
+    // aplicaba. Con <p> (que también tiene su font-size global) hace falta
+    // este selector puntual para ganarle por especificidad.
+    p {
+      margin: 0; // el navegador le pone margen por defecto, esto lo quita
+      font-size: 30px;
+      line-height: 40px; // 30/40 según Figma
     }
   }
 
@@ -56,11 +67,13 @@
     display: inline-flex;
     align-items: center;
 
-    h3 {
-      // sin el margen por defecto del navegador y con line-height ajustado,
-      // para que el texto quede centrado con los botones de editar/eliminar
+    // antes era un <h3>: sin selector propio en styles.scss, pero mejor
+    // fijar el tamaño acá explícito (mismo criterio que &__header con
+    // <p>) en vez de depender del tamaño por defecto del navegador.
+    p {
       margin: 0;
-      line-height: 1.2;
+      font-size: 25px;
+      line-height: 30px; // 25/30 según Figma
     }
   }
 
@@ -93,10 +106,7 @@
 
   &__match-row,
   &__match-form {
-    position: relative; // para anclar row-actions a la derecha
-    align-items: center;
     margin-bottom: 24px; // un poco mas de aire entre filas
-    padding-right: 96px; // deja espacio para los botones, para que no queden "dentro" de Confirmados
 
     // evita que texto largo (ej. en Confirmados) se desborde de su celda
     > span {
@@ -280,23 +290,53 @@
     }
   }
 
-  // ancladas al borde derecho REAL de la fila, no dentro de ninguna columna
+  // en la fila de lectura, editar/eliminar viven DENTRO de la celda de
+  // Confirmados (ver &__confirmados-cell) en vez de ser su propia columna
+  // del grid: así quedan pegados al texto con una separación chica, no
+  // sueltos en el resto del ancho que le toca a esa columna (1fr).
   &__row-actions {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
     display: flex;
     gap: 8px;
   }
 
-  // en el date-row se reusa el mismo grupo, pero NO como position:absolute
-  // (ahi ya vive dentro de un flex normal, junto al texto de la fecha),
-  // y con menos gap (ajusta este numero si aun se ven muy separados)
+  // en match-form sí es su propia columna del grid (ahí no hay texto de
+  // "confirmados" al que pegarse), por eso mantiene el layout normal
+  &__match-form &__row-actions {
+    justify-content: flex-end;
+  }
+
+  // en el date-row se reusa el mismo grupo, pero dentro de un flex normal
+  // junto al texto de la fecha (no en el grid), con menos gap
   &__row-actions--inline {
-    position: static;
-    transform: none;
+    justify-content: flex-start;
     gap: 4px;
+  }
+
+  // texto + acciones juntos en la misma celda de "Confirmados": gap chico
+  // fijo entre el fin del texto y los íconos, en vez de que floten sueltos
+  // al final de la columna. overflow:visible pisa el ellipsis que aplica
+  // ">span" (arriba) a las celdas del grid — acá el que trunca es el span
+  // interno del texto, los íconos nunca deben cortarse.
+  // justify-content:space-between (no gap fijo) empuja los íconos al borde
+  // derecho de esta columna — el mismo borde donde caen los botones de
+  // confirmar/descartar del modo edición (ver &__match-form &__row-actions,
+  // también flex-end en su propia columna). Con un gap fijo en vez de esto,
+  // los íconos quedaban pegados al texto pero en una posición distinta a la
+  // de esos botones, y saltaban de lugar al entrar/salir de edición.
+  &__confirmados-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  &__confirmados-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
   }
 
   // mismo espacio reservado que las filas, para que la barra termine

@@ -1,7 +1,8 @@
 :host {
+  // ya no calcula su propio offset contra el sidebar: vive dentro de
+  // .app-shell__content (flex column), así que ocupa el 100% de esa
+  // columna automáticamente
   display: block;
-  width: calc(100% - var(--panel-width));
-  margin-left: var(--panel-width);
 }
 
 .header {

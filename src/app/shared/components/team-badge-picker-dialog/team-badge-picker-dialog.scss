@@ -1,0 +1,79 @@
+.explorer {
+  padding: 24px 32px;
+  min-width: 460px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 28px;
+
+    h2 {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 700;
+    }
+  }
+
+  &__files {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 32px;
+  }
+
+  &__file {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 6px;
+
+    span {
+      font-size: 15px;
+      color: var(--color-text);
+    }
+
+    // el círculo del badge ya trae su propio color; el "seleccionado" se
+    // marca con un aro alrededor, no cambiando el ícono
+    app-icon-team-badge-triangulo,
+    app-icon-team-badge-estrella {
+      border-radius: 50%;
+      outline: 2px solid transparent;
+      outline-offset: 3px;
+      transition: outline-color 0.15s ease;
+    }
+
+    &--selected app-icon-team-badge-triangulo,
+    &--selected app-icon-team-badge-estrella {
+      outline-color: var(--color-primary-muted);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  &__btn {
+    all: unset;
+    box-sizing: border-box;
+    min-width: 108px;
+    text-align: center;
+    padding: 8px 20px;
+    border: 1.5px solid var(--color-text);
+    border-radius: 5px;
+    color: var(--color-text);
+    font-size: 20px;
+    cursor: pointer;
+
+    &:disabled {
+      border-color: var(--color-text-secondary);
+      color: var(--color-text-secondary);
+      cursor: not-allowed;
+    }
+  }
+}

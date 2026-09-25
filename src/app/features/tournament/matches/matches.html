@@ -2,23 +2,25 @@
   <ng-container *ngIf="tournament.teams.quantity >= 2; else noTeams">
     <div class="matches-table">
       <div class="matches-table__header">
-        <span><h2>Equipo 1</h2></span>
-        <span><h2>Equipo 2</h2></span>
-        <span><h2>Hora</h2></span>
-        <span><h2>Lugar</h2></span>
-        <span><h2>Confirmados</h2></span>
+        <span><p>Equipo 1</p></span>
+        <span><p>Equipo 2</p></span>
+        <span><p>Hora</p></span>
+        <span><p>Lugar</p></span>
+        <span><p>Confirmados</p></span>
       </div>
 
-      <div class="matches-table__date-group" *ngFor="let entry of tournament.matches | keyvalue">
+      <div class="matches-table__date-group" *ngFor="let entry of tournament.matches | keyvalue: sortDateEntries">
         <div class="matches-table__date-row">
-          <span class="matches-table__date-title"><h3>{{ formatDate(entry.value.date) }} ({{ entry.value.count }})</h3></span>
+          <span class="matches-table__date-title"><p>{{ formatDate(entry.value.date) }}{{ entry.value.count > 0 ? ' (' + entry.value.count + ')' : '' }}</p></span>
 
           <!-- editar/eliminar fecha, con el mismo gap que row-actions (8px) -->
           <div class="matches-table__row-actions matches-table__row-actions--inline">
             <span class="matches-table__date-edit-wrapper">
-              <app-edit-button (edit)="openDatePickerFor(dateDp)"></app-edit-button>
+              <app-edit-button (edit)="openDatePickerFor(dateDp, entry.key)"></app-edit-button>
               <input
                 [matDatepicker]="dateDp"
+                [matDatepickerFilter]="dateFilterForEdit"
+                [min]="minDate"
                 [value]="asDate(entry.value.date)"
                 (dateChange)="onDateChanged(entry.key, $event.value)"
                 class="matches-table__hidden-date-input"
@@ -31,8 +33,7 @@
               </mat-datepicker-actions>
             </mat-datepicker>
 
-            <!-- TODO: funcionalidad real de eliminar fecha -->
-            <app-delete-button></app-delete-button>
+            <app-delete-button (delete)="onDeleteDate(entry.key)"></app-delete-button>
           </div>
 
           <!-- colapsa/expande los partidos de esta fecha -->
@@ -56,13 +57,14 @@
               <span>{{ match.value.team2 }}</span>
               <span>{{ match.value.time }}</span>
               <span>{{ match.value.place }}</span>
-              <!-- TODO: calcular confirmados reales cuando exista el roster de jugadores -->
-              <span>0/0 | 0/0 = 0/0</span>
-              <div class="matches-table__row-actions">
-                <!-- TODO: funcionalidad real de eliminar partido -->
-                <app-edit-button (edit)="onEditMatch(entry.key, match.key, match.value)"></app-edit-button>
-                <app-delete-button></app-delete-button>
-              </div>
+              <span class="matches-table__confirmados-cell">
+                <!-- TODO: calcular confirmados reales cuando exista el roster de jugadores -->
+                <span class="matches-table__confirmados-text">0/0 | 0/0 = 0/0</span>
+                <div class="matches-table__row-actions">
+                  <app-edit-button (edit)="onEditMatch(entry.key, match.key, match.value)"></app-edit-button>
+                  <app-delete-button (delete)="onDeleteMatch(entry.key, match.key)"></app-delete-button>
+                </div>
+              </span>
             </div>
           </ng-container>
 
@@ -174,6 +176,7 @@
              por eso NO usamos display:none (eso rompe el cálculo de posición) -->
         <input
           [matDatepicker]="picker"
+          [matDatepickerFilter]="dateFilter"
           [min]="minDate"
           [(ngModel)]="selectedDate"
           class="matches-table__hidden-date-input"
@@ -193,4 +196,6 @@
       Añade al menos dos equipos para agregar partidos. Para ello dirígete a Equipos.
     </p>
   </ng-template>
+
+  <app-illustration-band-calendario class="matches-illustration" />
 </ng-container>
