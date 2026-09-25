@@ -3,23 +3,36 @@
 }
 
 .tournament-tabs {
-  // position: fixed en vez de dentro del flujo normal: se posiciona
-  // respecto a la VENTANA, no le importa ningun contenedor padre — pero sí
-  // debe respetar el panel de torneos (fixed a la izquierda), así que el
-  // centrado es relativo al espacio a la derecha de var(--panel-width).
-  position: fixed;
-  top: var(--header-height);
-  left: var(--panel-width);
-  width: calc(100vw - var(--panel-width));
-  box-sizing: border-box; // sin esto, el padding se suma por fuera del ancho y descuadra el centro
+  // sticky en vez de fixed: se queda pegado arriba del contenedor que
+  // scrollea (app-home) sin necesitar calcular su propio ancho/offset
+  // contra el sidebar — al estar en flujo normal, ya ocupa el 100% de su
+  // columna de contenido automáticamente.
+  position: sticky;
+  top: 0;
   z-index: var(--z-content);
+  box-sizing: border-box;
+
+  // el fondo lleva el mismo patrón de puntos que el resto de la app (mismos
+  // valores que app-dot-texture), para que al hacer scroll no se vea el
+  // contenido pasando por detrás ni se corte la textura de golpe.
+  background-color: var(--color-background);
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.08) 1.14px,
+    transparent 1.14px
+  );
+  background-size: 22.76px 22.76px;
 
   display: flex;
   justify-content: center;
-  gap: 32px;
+  // 32px quedaba muy junto: en el mockup (nodo 170:6235) el centro de cada
+  // tab está a ~166px del siguiente, que con el ancho del texto de cada
+  // uno da un espacio real de ~70-80px entre etiquetas.
+  gap: 72px;
   padding: 0 32px;
 
   font-size: 20px;
+  line-height: 25px; // 20/25 según Figma
 
   button {
     all: unset;
@@ -36,8 +49,13 @@
   }
 }
 
+// único lugar que define el ancho de "contenido" (tabla, columnas, líneas
+// divisoras, texto): Partidos/Equipos/Ajustes viven todos adentro, así que
+// comparten el mismo ancho y centrado sin que cada uno lo repita por su
+// cuenta. El nav de tabs queda afuera a propósito (ocupa todo el ancho).
 .tournament-content {
-  // compensa el espacio que el nav (ahora position:fixed) deja de ocupar
-  // en el flujo normal, para que el contenido no quede tapado debajo
-  margin-top: 48px; // ajusta este numero segun la altura real del nav
+  max-width: 80%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
+

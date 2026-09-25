@@ -58,8 +58,7 @@ p {
 }
 
 :root {
-  --header-height: 72px;
-  --panel-width: 220px;
+  --header-height: 112px; // más margen respecto al borde superior de la vista
   --z-content: 1;
   --color-background: #0e0e10;
   --color-text: #FFFFFF;
@@ -78,6 +77,19 @@ app-root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+// app.scss quiere hacer esto mismo con "router-outlet + *", pero esa regla
+// nunca aplica: Angular no le pone el atributo de scope de App al host que
+// router-outlet inserta en tiempo de ejecución. Va acá (global, sin scope)
+// para que sí funcione: app-home pasa a ser el contenedor que scrollea
+// cuando Partidos/Equipos/Ajustes tienen más contenido del que entra.
+app-home {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
  
 .layout {

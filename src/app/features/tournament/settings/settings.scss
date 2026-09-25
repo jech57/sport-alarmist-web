@@ -1,0 +1,84 @@
+:host {
+  // sin esto, app-settings queda display:inline (default del navegador) —
+  // mismo caso que app-teams.
+  display: block;
+}
+
+.settings {
+  // margin horizontal auto para centrarlo en el ancho disponible (ya
+  // descontado el panel de torneos por los ancestros), en vez de quedar
+  // pegado a la izquierda como Equipos.
+  margin: 88px auto 0;
+  max-width: 420px;
+
+  &__field {
+    width: 100%;
+  }
+
+  &__checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 24px;
+  }
+
+  &__info-icon {
+    color: var(--color-primary-muted);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+}
+
+// decorativa, anclada abajo a la derecha — el doodle porque Ajustes no
+// tiene un tema tan directo como fechas (Partidos) o competencia (Equipos).
+.settings-illustration {
+  position: fixed;
+  right: 32px;
+  bottom: 24px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+::ng-deep .settings .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+// Estado NORMAL del input (mismo criterio que tournament-create-dialog.scss)
+::ng-deep .settings .mdc-notched-outline__leading,
+::ng-deep .settings .mdc-notched-outline__notch,
+::ng-deep .settings .mdc-notched-outline__trailing {
+  border-color: var(--color-text) !important;
+}
+
+// Estado ENFOCADO
+::ng-deep .settings .mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .settings .mdc-text-field--focused .mdc-notched-outline__notch,
+::ng-deep .settings .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--color-primary-muted) !important;
+}
+
+::ng-deep .settings .mdc-floating-label,
+::ng-deep .settings .mdc-floating-label--float-above {
+  color: var(--color-text) !important;
+}
+
+::ng-deep .settings .mat-mdc-checkbox {
+  margin-left: -11px;
+}
+
+::ng-deep .settings .mdc-checkbox__background {
+  border-color: var(--color-primary-muted) !important;
+}
+
+::ng-deep .settings .mat-mdc-checkbox-checked .mdc-checkbox__background {
+  border-color: var(--color-primary-muted) !important;
+  background-color: var(--color-primary-muted) !important;
+}
+
+::ng-deep .settings .mdc-checkbox__checkmark-path {
+  stroke: var(--color-text) !important;
+}

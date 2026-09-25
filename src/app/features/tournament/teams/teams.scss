@@ -1,0 +1,185 @@
+:host {
+  // sin esto, app-teams queda display:inline (default del navegador) y se
+  // encoge a un ancho mínimo, apretando toda la tabla — mismo :host que ya
+  // tienen Header/Tournament/Matches.
+  display: block;
+}
+
+.teams-table {
+  padding: 48px 32px 0; // mismo espacio que .matches-table en Partidos
+
+  &__header,
+  &__row,
+  &__form {
+    display: grid;
+    // Las 4 columnas de datos van a peso igual (1fr); la 5ta es fija para
+    // editar/eliminar, así los botones quedan pegados al contenido real en
+    // vez de position:absolute contra el borde derecho de toda la fila
+    // (que en pantallas anchas los dejaba lejos de "Jugadores").
+    grid-template-columns: 1fr 1fr 1fr 1fr 64px;
+    gap: 24px;
+    align-items: center;
+  }
+
+  &__header {
+    font-weight: 700;
+    min-height: 56px;
+    margin-bottom: 32px;
+
+    > span {
+      // overflow:hidden (ambos ejes) se comía la cola de la "g" en
+      // "Jugadores": solo hace falta recortar el ancho, no el alto.
+      display: flex;
+      align-items: center;
+      min-height: 56px;
+      overflow-x: hidden;
+      overflow-y: visible;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    // antes era un <h2>: el h2 global (styles.scss) fija font-size:30px en
+    // el propio elemento, ganándole por especificidad a lo que se pusiera
+    // en el contenedor. Con <p> hace falta este selector puntual.
+    p {
+      margin: 0;
+      display: inline;
+      font-size: 30px;
+      line-height: 40px; // 30/40 según Figma
+    }
+  }
+
+  &__info {
+    margin-left: 6px;
+    color: var(--color-primary-muted);
+  }
+
+  &__row,
+  &__form {
+    margin-bottom: 16px;
+    min-height: 52px; // antes se quedaba con la altura mínima del contenido (chica)
+    font-size: 20px; // antes heredaba el tamaño de texto por defecto del body (chico)
+
+    > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    color: var(--color-text-secondary);
+    background-color: rgba(255, 255, 255, 0.04);
+    overflow: hidden; // el ícono no se sale del contenedor
+
+    // en el form, el mismo cupo es un botón que abre el explorador de
+    // escudos (nodo 170:6767) en vez de quedar vacío
+    &--pick {
+      all: unset;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      border: 1px dashed var(--color-text-secondary);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+
+      &:hover {
+        border-color: var(--color-primary-muted);
+        color: var(--color-primary-muted);
+      }
+    }
+  }
+
+  &__players-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__players-link {
+    all: unset;
+    cursor: pointer;
+    color: var(--color-primary-muted);
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  &__password-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__password-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__eye-btn {
+    all: unset;
+    display: inline-flex;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+
+    &:hover {
+      color: var(--color-primary-muted);
+    }
+  }
+
+  &__text-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-text-secondary);
+    color: var(--color-text);
+    font-size: 20px;
+    padding: 4px 0;
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--color-primary);
+    }
+  }
+
+  // columna real del grid (ver &__header,&__row,&__form arriba): ya no
+  // hace falta position:absolute, el grid las deja en su celda fija
+  &__row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  // &__form solo tiene 4 items reales (escudo, nombre, contraseña, acciones)
+  // contra los 5 de header/row (con Jugadores en medio), así que sin esto
+  // las acciones caerían en la columna 4 en vez de la 5.
+  &__form &__row-actions {
+    grid-column: 5;
+  }
+}
+
+// decorativa — el trofeo, porque Equipos es lo más ligado a la competencia
+// en sí. En flujo normal (no fixed) para que siempre aparezca al final del
+// scroll en vez de ocultarse o superponerse según cuántos equipos haya.
+.teams-illustration {
+  display: block;
+  margin: 32px auto 48px;
+  width: 412px;
+  max-width: 100%;
+  opacity: 0.6;
+  pointer-events: none;
+}

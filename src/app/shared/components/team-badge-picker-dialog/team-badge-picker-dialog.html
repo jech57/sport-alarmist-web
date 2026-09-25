@@ -1,0 +1,39 @@
+<div class="explorer">
+  <div class="explorer__title">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M3 6.5C3 5.67157 3.67157 5 4.5 5H9.17157C9.56939 5 9.95093 5.15804 10.2322 5.43934L11.5 6.70711C11.7813 6.98842 12.1628 7.14645 12.5607 7.14645H19.5C20.3284 7.14645 21 7.81802 21 8.64645V17.5C21 18.3284 20.3284 19 19.5 19H4.5C3.67157 19 3 18.3284 3 17.5V6.5Z"
+        stroke="#FFFFFF"
+        stroke-width="1.6"
+        stroke-linejoin="round" />
+    </svg>
+    <h2>Explorador de archivos</h2>
+  </div>
+
+  <div class="explorer__files">
+    <button
+      type="button"
+      class="explorer__file"
+      [class.explorer__file--selected]="selected === 'triangulo'"
+      (click)="select('triangulo')"
+    >
+      <app-icon-team-badge-triangulo [size]="92"></app-icon-team-badge-triangulo>
+      <span>Triangulo.png</span>
+    </button>
+
+    <button
+      type="button"
+      class="explorer__file"
+      [class.explorer__file--selected]="selected === 'estrella'"
+      (click)="select('estrella')"
+    >
+      <app-icon-team-badge-estrella [size]="92"></app-icon-team-badge-estrella>
+      <span>Estrella.png</span>
+    </button>
+  </div>
+
+  <div class="explorer__actions">
+    <button type="button" class="explorer__btn" (click)="close()">Cerrar</button>
+    <button type="button" class="explorer__btn" [disabled]="!selected" (click)="confirm()">OK</button>
+  </div>
+</div>

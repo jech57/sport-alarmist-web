@@ -1,0 +1,20 @@
+.info-dialog {
+  padding: 28px 32px;
+  min-width: 340px;
+  max-width: 420px;
+  text-align: center;
+
+  &__title {
+    margin: 0 0 16px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__message {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+}

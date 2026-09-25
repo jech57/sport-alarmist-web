@@ -16,12 +16,24 @@ export interface MatchDate {
   matches: Record<string, Match>;
 }
 
+// Hasta que exista carga real de imágenes, el "escudo" es una de estas dos
+// (nodo 170:6767, simulador de explorador de archivos).
+export type TeamBadge = 'triangulo' | 'estrella';
+
+export interface Team {
+  name: string;
+  password: string;
+  players: number; // TODO: reemplazar por el roster real cuando exista esa pantalla
+  badge?: TeamBadge;
+}
+
 export interface Tournament {
   name: string;
   matches: Record<string, MatchDate>;
   teams: {
     quantity: number;
   };
+  teamsList: Record<string, Team>;
   settings: {
     enable_registration: boolean;
   };
@@ -95,11 +107,6 @@ export class TournamentCreateService {
   }
 
   add(name: string, enableRegistrations: boolean): string {
-    // TEMPORAL: la primera vez que se crea un torneo, sembramos uno mock
-    // aparte con 2 equipos ya listos, para poder probar Partidos sin tener
-    // que ir a agregar equipos a mano. Buscar "TEMPORAL" para quitarlo luego.
-    const isFirstTournament = Object.keys(this.tournaments).length === 0;
-
     const id = crypto.randomUUID();
 
     this.tournaments[id] = {
@@ -108,24 +115,11 @@ export class TournamentCreateService {
       teams: {
         quantity: 0
       },
+      teamsList: {},
       settings: {
         enable_registration: enableRegistrations
       }
     };
-
-    if (isFirstTournament) {
-      const mockId = crypto.randomUUID();
-      this.tournaments[mockId] = {
-        name: 'Torneo de prueba (2 equipos)',
-        matches: {},
-        teams: {
-          quantity: 2
-        },
-        settings: {
-          enable_registration: false
-        }
-      };
-    }
 
     this.persist();
     this.tournaments$.next({ ...this.tournaments });
@@ -145,5 +139,37 @@ export class TournamentCreateService {
   notifyChange(): void {
     this.persist();
     this.tournaments$.next({ ...this.tournaments });
+  }
+
+  updateSettings(tournamentId: string, name: string, enableRegistrations: boolean): void {
+    const tournament = this.tournaments[tournamentId];
+    if (!tournament) return;
+
+    tournament.name = name;
+    tournament.settings.enable_registration = enableRegistrations;
+    this.notifyChange();
+  }
+
+  addTeam(tournamentId: string, name: string, password: string, badge?: TeamBadge): void {
+    const tournament = this.tournaments[tournamentId];
+    if (!tournament) return;
+
+    // torneos creados antes de que teamsList existiera en el modelo no lo
+    // traen en su JSON guardado en sessionStorage: se completa acá.
+    if (!tournament.teamsList) tournament.teamsList = {};
+
+    const id = crypto.randomUUID();
+    tournament.teamsList[id] = { name, password, players: 0, badge };
+    tournament.teams.quantity = Object.keys(tournament.teamsList).length;
+    this.notifyChange();
+  }
+
+  removeTeam(tournamentId: string, teamId: string): void {
+    const tournament = this.tournaments[tournamentId];
+    if (!tournament || !tournament.teamsList) return;
+
+    delete tournament.teamsList[teamId];
+    tournament.teams.quantity = Object.keys(tournament.teamsList).length;
+    this.notifyChange();
   }
 }

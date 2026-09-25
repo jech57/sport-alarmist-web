@@ -3,9 +3,16 @@
   height: 100%;
 }
 
+// Antes el sidebar era position:fixed y cada componente de contenido
+// (header, tabs, empty-state...) reservaba ese espacio a mano con
+// calc(var(--panel-width) + var(--content-gap)) en su propio CSS. Frágil:
+// en pantallas angostas ese cálculo no cuadraba con el ancho real del
+// sidebar y dejaba huecos. Con flex real, el espacio entre sidebar y
+// contenido lo gestiona ESTE contenedor (una sola vez) y el ancho de la
+// columna de contenido es automático (flex:1) — ningún componente de
+// adentro necesita saber cuánto mide el sidebar.
 .app-shell {
   display: flex;
-  flex-direction: column;
   height: 100%;
   position: relative;
   overflow: hidden;
@@ -14,19 +21,19 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    pointer-events: none; 
+    pointer-events: none;
   }
 
-  app-header,
-  router-outlet + * {
+  > * {
     position: relative;
     z-index: 1;
   }
+}
 
-  router-outlet + * {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0; 
-  }
+.app-shell__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; // sin esto, contenido con texto largo puede empujar la columna más ancha de lo debido
+  height: 100%;
 }
