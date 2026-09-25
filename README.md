@@ -46,7 +46,7 @@ Listo! Diríjase a la ruta [localhost:4200](localhost:4200) en cualquier navegad
 ## Recomendaciones
 Tenga en cuenta las siguientes recomendaciones al usar la aplicación:
 
-- Se agregó la opción de borrar un equipo. Si usted borra un equipo que pertenece a un partido, esto también eliminará el partido.
+- Se agregó la opción de borrar un equipo. Esto no cuenta con un modal de confirmación, así que tenga cuidado al darl click en el ícono de basura, porque si usted borra un equipo que pertenece a un partido, esto también eliminará el partido.
 
 ## Explicaciones de cambios
 
